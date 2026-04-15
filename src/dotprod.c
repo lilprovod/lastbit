@@ -82,3 +82,19 @@ double dot_reference(const double* x, const double* y, size_t n)
 {
     return dot_fma_generic(x, y, n, sum_gmp);
 }
+
+
+DotResults compute_all(const double* x, const double* y, size_t n)
+{
+    DotResults results = {0};
+
+    results.naive       = dot_naive(x, y, n);
+    results.kahan       = dot_kahan(x, y, n);
+    results.kbn2        = dot_kbn2(x, y, n);
+    results.kbn3        = dot_kbn3(x, y, n);
+    results.ogita_oishi = dot_ogita_oishi(x, y, n);
+    results.fma         = dot_fma(x, y, n);
+    results.reference   = dot_reference(x, y, n);
+
+    return results;
+}

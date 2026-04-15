@@ -72,25 +72,21 @@ void hello_message()
     printf( "\n[Dot product algorithm comparison]\n\n");
 }
 
-void show_table(
-    double naive, double kahan, double kbn2,
-    double kbn3,  double oo,    double fma,
-    double ref
-)
+void show_table(const DotResults* results)
 {
     printf("%-12s | %-24s\n", "Method", "Result");
     printf("-------------+------------------------\n");
-    printf("%-12s | %.17g\n", "naive",      naive);
-    printf("%-12s | %.17g\n", "kahan",      kahan);
-    printf("%-12s | %.17g\n", "kbn2",       kbn2 );
-    printf("%-12s | %.17g\n", "kbn3",       kbn3 );
-    printf("%-12s | %.17g\n", "ogita-oishi", oo  );
-    printf("%-12s | %.17g\n", "fma",        fma  );
-    printf("%-12s | %.17g\n", "reference*", ref  );
+    printf("%-12s | %.17g\n", "naive",       results->naive         );
+    printf("%-12s | %.17g\n", "kahan",       results->kahan         );
+    printf("%-12s | %.17g\n", "kbn2",        results->kbn2          );
+    printf("%-12s | %.17g\n", "kbn3",        results->kbn3          );
+    printf("%-12s | %.17g\n", "ogita-oishi", results->ogita_oishi   );
+    printf("%-12s | %.17g\n", "fma",         results->fma           );
+    printf("%-12s | %.17g\n", "reference*",  results->reference     );
 }
 
 //!DEBUG
-void show_input(InputData* data)
+void show_input(const InputData* data)
 {
     printf(
         "Vectors size: %zu\n"

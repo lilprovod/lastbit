@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "dotprod.h"
+
 #define MAX_NUM_SIZE        128
 
 typedef struct {
@@ -29,14 +31,10 @@ void print_usage();
 
 void hello_message();
 
-void show_table(
-    double naive, double kahan, double kbn2,
-    double kbn3,  double oo,    double fma,
-    double ref
-);
+void show_table(const DotResults* results);
 
 //!DEBUG
-void show_input(InputData* data);
+void show_input(const InputData* data);
 
 
 #endif

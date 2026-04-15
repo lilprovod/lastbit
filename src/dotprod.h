@@ -3,6 +3,16 @@
 
 #include <stddef.h>
 
+typedef struct {
+    double naive;
+    double kahan;
+    double kbn2;
+    double kbn3;
+    double ogita_oishi;
+    double fma;
+    double reference;
+} DotResults;
+
 /** @brief Наивное скалярное произведение */
 double dot_naive(const double* x, const double* y, size_t n);
 
@@ -23,5 +33,8 @@ double dot_fma(const double* x, const double* y, size_t n);
 
 /** @brief (Эталон*) Скалярное произведение с суммой GMP и произведением FMA */
 double dot_reference(const double* x, const double* y, size_t n);
+
+
+DotResults compute_all(const double* x, const double* y, size_t n);
 
 #endif
