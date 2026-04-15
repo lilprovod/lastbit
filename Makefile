@@ -19,6 +19,4 @@ $(TARGET): $(OBJ)
 clean:
 	$(RM) -f $(OBJ) $(TARGET)
 
-rebuild:
-	clean
-	all
+rebuild: clean all
