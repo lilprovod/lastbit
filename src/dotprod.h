@@ -40,7 +40,7 @@ double dot_fma(const double* x, const double* y, size_t n);
 /** @brief Наивное сложение двух чисел */
 double sum_naive(const double x, const double y);
 
-/** @brief Наивное сложение набора чисел с помощью алгоритма Кэхэна */
+/** @brief Сложение набора чисел с помощью алгоритма Кэхэна */
 double sum_kahan(const double* values, size_t n);
 
 
