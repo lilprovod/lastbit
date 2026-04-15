@@ -51,25 +51,29 @@ double dot_ogita_oishi(const double* x, const double* y, size_t n) {
     return dot_generic(x, y, n, mul_naive, sum_ogita_oishi);
 }
 
-double dot_fma(const double* x, const double* y, size_t n)
+/** @brief Общий интерфейс для скалярного произведения через FMA */
+static double dot_fma_generic(
+    const double* x,
+    const double* y,
+    size_t        n,
+    double        (*sum)(const double*, size_t)
+)
 {
-    double* hi_terms = malloc(n * sizeof(double));
-    if (!hi_terms) { return 0.0; }
-
-    double* lo_terms = malloc(n * sizeof(double));
-    if (!lo_terms) { free(hi_terms); return 0.0; }
+    double* all_terms = malloc(2*n * sizeof(double));
+    if (!all_terms) { return 0.0; }
 
     for (size_t i = 0; i < n; i++) {
-        mul_fma(x[i], y[i], &hi_terms[i], &lo_terms[i]);
+        mul_fma(x[i], y[i], &all_terms[2*i], &all_terms[2*i + 1]);
     }
 
-    double hi_sum = sum_kahan(hi_terms, n);
-    double lo_sum = sum_kahan(lo_terms, n);
+    double total = sum(all_terms, 2*n);
 
-    double sum = hi_sum + lo_sum;
+    free(all_terms);
 
-    free(hi_terms);
-    free(lo_terms);
+    return total;
+}
 
-    return sum;
+double dot_fma(const double* x, const double* y, size_t n)
+{
+    return dot_fma_generic(x, y, n, sum_kahan);
 }
