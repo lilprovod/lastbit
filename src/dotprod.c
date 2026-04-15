@@ -37,6 +37,10 @@ double dot_kahan(const double* x, const double* y, size_t n)
     return dot_generic(x, y, n, mul_naive, sum_kahan);
 }
 
+double dot_ogita_oishi(const double* x, const double* y, size_t n) {
+    return dot_generic(x, y, n, mul_naive, sum_ogita_oishi);
+}
+
 double dot_fma(const double* x, const double* y, size_t n)
 {
     double* hi_terms = malloc(n * sizeof(double));
