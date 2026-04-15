@@ -1,2 +1,2 @@
-# lastbit
-Exact dot production algorithm up to the last bit of IEEE734 double presicion
+# LastBit
+Алгоритм, вычисляющий скалярное произведение двух векторов с точностью до последнего значащего бита числа двойной точности IEEE 754 double.

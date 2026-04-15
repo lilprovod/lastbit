@@ -1,0 +1,8 @@
+# input data
+*.txt
+
+# binary files
+*.exe
+
+# ide files
+/.vscode
