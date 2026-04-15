@@ -20,3 +20,19 @@ double sum_kahan(const double* values, size_t n)
 
     return sum;
 }
+
+double sum_ogita_oishi(const double* values, size_t n)
+{
+    double sum = 0.0;
+    double err = 0.0;
+
+    for (size_t i = 0; i < n; i++) {
+        double temp  = sum + values[i];
+        double delta = (sum - temp) + values[i];
+
+        sum = temp;
+        err += delta;
+    }
+
+    return sum + err;
+}

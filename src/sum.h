@@ -9,4 +9,7 @@ double sum_naive(const double x, const double y);
 /** @brief Сложение набора чисел с помощью алгоритма Кэхэна */
 double sum_kahan(const double* values, size_t n);
 
+/** @brief Сложение набора чисел с помощью алгоритма Ogita-Oishi */
+double sum_ogita_oishi(const double* values, size_t n);
+
 #endif
