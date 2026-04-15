@@ -15,6 +15,9 @@ double dot_kbn2(const double* x, const double* y, size_t n);
 /** @brief Скалярное произведение с суммой КБН 3-го порядка */
 double dot_kbn3(const double* x, const double* y, size_t n);
 
+/** @brief Скалярное произведение с суммой через алгоритм Ogita-Oishi */
+double dot_ogita_oishi(const double* x, const double* y, size_t n);
+
 /** @brief Скалярное произведение с произведением FMA */
 double dot_fma(const double* x, const double* y, size_t n);
 
