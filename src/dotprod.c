@@ -6,11 +6,14 @@
 
 double dot_naive(const double* x, const double* y, size_t n)
 {
-    double sum = 0.0;
+    double* terms = malloc(n * sizeof(double));
+    if (!terms) { return 0.0; }
 
     for (size_t i = 0; i < n; i++) {
-        sum = sum_naive(sum, mul_naive(x[i], y[i]));
+        terms[i] = mul_naive(x[i], y[i]);
     }
+
+    double sum = sum_naive(terms, n);
 
     return sum;
 }

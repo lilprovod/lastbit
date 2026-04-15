@@ -1,8 +1,14 @@
 #include "sum.h"
 
-double sum_naive(const double x, const double y)
+double sum_naive(const double* values, size_t n)
 {
-    return x + y;
+    double sum = 0.0;
+
+    for (size_t i = 0; i < n; i++) {
+        sum += values[i];
+    }
+
+    return sum;
 }
 
 double sum_kahan(const double* values, size_t n)
