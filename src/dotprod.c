@@ -77,3 +77,8 @@ double dot_fma(const double* x, const double* y, size_t n)
 {
     return dot_fma_generic(x, y, n, sum_kahan);
 }
+
+double dot_reference(const double* x, const double* y, size_t n)
+{
+    return dot_fma_generic(x, y, n, sum_gmp);
+}

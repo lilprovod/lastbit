@@ -21,4 +21,7 @@ double dot_ogita_oishi(const double* x, const double* y, size_t n);
 /** @brief Скалярное произведение с произведением FMA */
 double dot_fma(const double* x, const double* y, size_t n);
 
+/** @brief (Эталон*) Скалярное произведение с суммой GMP и произведением FMA */
+double dot_reference(const double* x, const double* y, size_t n);
+
 #endif
