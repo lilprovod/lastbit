@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "io.h"
+#include "dotprod.h"
 
 typedef enum {
     NORMAL_MODE,
@@ -75,6 +76,14 @@ int main(int argc, char* argv[])
     }
     
     show_input(&data);
+
+    hello_message();
+
+    double naive_result = dot_naive(data.x, data.y, data.n);
+    double kahan_result = dot_kahan(data.x, data.y, data.n);
+    double fma_result   = dot_fma(data.x, data.y, data.n);
+
+    show_table(naive_result, kahan_result, fma_result);
 
     free_input(&data);
 

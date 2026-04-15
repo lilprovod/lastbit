@@ -67,6 +67,20 @@ void print_usage()
     );
 }
 
+void hello_message()
+{
+    printf( "\n[Dot product algorithm comparison]\n\n");
+}
+
+void show_table(double naive, double kahan, double fma)
+{
+    printf("%-12s | %-24s\n", "Method", "Result");
+    printf("------------+------------------------\n");
+    printf("%-12s | %.17g\n", "naive", naive);
+    printf("%-12s | %.17g\n", "kahan", kahan);
+    printf("%-12s | %.17g\n", "fma",   fma  );
+}
+
 //!DEBUG
 void show_input(InputData* data)
 {

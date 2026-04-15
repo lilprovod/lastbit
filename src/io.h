@@ -27,7 +27,12 @@ void free_input(InputData* data);
 
 void print_usage();
 
+void hello_message();
+
+void show_table(double naive, double kahan, double fma);
+
 //!DEBUG
 void show_input(InputData* data);
+
 
 #endif
