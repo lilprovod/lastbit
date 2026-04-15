@@ -8,13 +8,13 @@ double sum_naive(const double x, const double y)
 double sum_kahan(const double* values, size_t n)
 {
     double sum  = 0.0;
-    double comp = 0.0;
+    double err = 0.0;
 
     for (size_t i = 0; i < n; i++) {
-        double corrected = values[i] - comp;
+        double corrected = values[i] - err;
         double temp = sum + corrected;
 
-        comp = (temp - sum) - corrected;
+        err = (temp - sum) - corrected;
         sum = temp;
     }
 
