@@ -1,5 +1,9 @@
+#include <gmp.h>
 #include <math.h>
+
 #include "sum.h"
+
+#define GMP_PRECISION 256
 
 double sum_naive(const double* values, size_t n)
 {
@@ -111,4 +115,25 @@ double sum_ogita_oishi(const double* values, size_t n)
     }
 
     return sum + err;
+}
+
+double sum_gmp(const double* values, size_t n)
+{
+    mpf_t sum;
+    mpf_t term;
+
+    mpf_init2(sum, GMP_PRECISION);
+    mpf_init2(term, GMP_PRECISION);
+
+    for (size_t i = 0; i < n; i++) {
+        mpf_set_d(term, values[i]);
+        mpf_add(sum, sum, term);
+    }
+
+    double total = mpf_get_d(sum);
+
+    mpf_clear(sum);
+    mpf_clear(term);
+
+    return total;
 }

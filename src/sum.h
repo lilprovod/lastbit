@@ -18,4 +18,7 @@ double sum_kbn3(const double* values, size_t n);
 /** @brief Сложение набора чисел с помощью алгоритма Ogita-Oishi */
 double sum_ogita_oishi(const double* values, size_t n);
 
+/** @brief Сложение набора чисел с помощью длинной арифметики GMP */
+double sum_gmp(const double* values, size_t n);
+
 #endif
