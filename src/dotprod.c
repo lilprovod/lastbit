@@ -39,7 +39,7 @@ double dot_kahan(const double* x, const double* y, size_t n)
 
 double dot_kbn2(const double* x, const double* y, size_t n)
 {
-    return dot_generic(x, y, n, mul_naive, sum_kbn3);
+    return dot_generic(x, y, n, mul_naive, sum_kbn2);
 }
 
 double dot_kbn3(const double* x, const double* y, size_t n)
