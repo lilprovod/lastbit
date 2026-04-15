@@ -3,10 +3,10 @@
 
 #include <stddef.h>
 
-/** @brief Наивное скалярное произведение равноразмерных векторов */
+/** @brief Наивное скалярное произведение */
 double dot_naive(const double* x, const double* y, size_t n);
 
-/** @brief Скалярное произведение с суммой Кэхэна равноразмерных векторов */
+/** @brief Скалярное произведение с суммой Кэхэна */
 double dot_kahan(const double* x, const double* y, size_t n);
 
 /** @brief Скалярное произведение с произведением FMA */
