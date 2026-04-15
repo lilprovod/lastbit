@@ -4,33 +4,37 @@
 #include "mul.h"
 #include "sum.h"
 
-double dot_naive(const double* x, const double* y, size_t n)
+/** @brief Общий интерфейс для скалярного произведения */
+static double dot_generic(
+    const double* x,
+    const double* y,
+    size_t        n,
+    double        (*mul)(const double, const double),
+    double        (*sum)(const double*, size_t)
+)
 {
     double* terms = malloc(n * sizeof(double));
     if (!terms) { return 0.0; }
 
     for (size_t i = 0; i < n; i++) {
-        terms[i] = mul_naive(x[i], y[i]);
+        terms[i] = mul(x[i], y[i]);
     }
 
-    double sum = sum_naive(terms, n);
+    double total = sum(terms, n);
 
-    return sum;
+    free(terms);
+
+    return total;
+}
+
+double dot_naive(const double* x, const double* y, size_t n)
+{
+    return dot_generic(x, y, n, mul_naive, sum_naive);
 }
 
 double dot_kahan(const double* x, const double* y, size_t n)
 {
-    double* terms = malloc(n * sizeof(double));
-    if (!terms) return 0.0;
-
-    for (size_t i = 0; i < n; i++) {
-        terms[i] = mul_naive(x[i], y[i]);
-    }
-
-    double sum = sum_kahan(terms, n);
-
-    free(terms);
-    return sum;
+    return dot_generic(x, y, n, mul_naive, sum_kahan);
 }
 
 double dot_fma(const double* x, const double* y, size_t n)
