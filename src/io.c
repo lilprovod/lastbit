@@ -72,13 +72,21 @@ void hello_message()
     printf( "\n[Dot product algorithm comparison]\n\n");
 }
 
-void show_table(double naive, double kahan, double fma)
+void show_table(
+    double naive, double kahan, double kbn2,
+    double kbn3,  double oo,    double fma,
+    double ref
+)
 {
     printf("%-12s | %-24s\n", "Method", "Result");
-    printf("------------+------------------------\n");
-    printf("%-12s | %.17g\n", "naive", naive);
-    printf("%-12s | %.17g\n", "kahan", kahan);
-    printf("%-12s | %.17g\n", "fma",   fma  );
+    printf("-------------+------------------------\n");
+    printf("%-12s | %.17g\n", "naive",      naive);
+    printf("%-12s | %.17g\n", "kahan",      kahan);
+    printf("%-12s | %.17g\n", "kbn2",       kbn2 );
+    printf("%-12s | %.17g\n", "kbn3",       kbn3 );
+    printf("%-12s | %.17g\n", "ogita-oishi", oo  );
+    printf("%-12s | %.17g\n", "fma",        fma  );
+    printf("%-12s | %.17g\n", "reference*", ref  );
 }
 
 //!DEBUG

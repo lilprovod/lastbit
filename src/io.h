@@ -29,7 +29,11 @@ void print_usage();
 
 void hello_message();
 
-void show_table(double naive, double kahan, double fma);
+void show_table(
+    double naive, double kahan, double kbn2,
+    double kbn3,  double oo,    double fma,
+    double ref
+);
 
 //!DEBUG
 void show_input(InputData* data);

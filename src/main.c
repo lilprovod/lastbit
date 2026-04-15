@@ -4,10 +4,13 @@
 #include "io.h"
 #include "dotprod.h"
 
+#define MAX_SHOW_VECTOR 10
+
 typedef enum {
     NORMAL_MODE,
     DEMO_MODE,
 } ProgramMode;
+
 
 int main(int argc, char* argv[])
 {
@@ -75,15 +78,24 @@ int main(int argc, char* argv[])
             break;
     }
     
-    show_input(&data);
+    if (data.n < MAX_SHOW_VECTOR) show_input(&data);
 
     hello_message();
 
     double naive_result = dot_naive(data.x, data.y, data.n);
     double kahan_result = dot_kahan(data.x, data.y, data.n);
+    double kbn2_result  = dot_kbn2(data.x, data.y, data.n);
+    double kbn3_result  = dot_kbn3(data.x, data.y, data.n);
+    double oo_result    = dot_ogita_oishi(data.x, data.y, data.n);
     double fma_result   = dot_fma(data.x, data.y, data.n);
+    double ref_result   = dot_reference(data.x, data.y, data.n);
 
-    show_table(naive_result, kahan_result, fma_result);
+
+    show_table(
+        naive_result, kahan_result, kbn2_result,
+        kbn3_result, oo_result, fma_result,
+        ref_result
+    );
 
     free_input(&data);
 
