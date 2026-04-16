@@ -35,6 +35,7 @@ double dot_fma(const double* x, const double* y, size_t n);
 double dot_reference(const double* x, const double* y, size_t n);
 
 
-DotResults compute_all(const double* x, const double* y, size_t n);
+/** @brief Рассчитывает скалярное произведение всеми алгоритмами */
+DotResults compute_all_dot(const double* x, const double* y, size_t n);
 
 #endif

@@ -84,7 +84,7 @@ double dot_reference(const double* x, const double* y, size_t n)
 }
 
 
-DotResults compute_all(const double* x, const double* y, size_t n)
+DotResults compute_all_dot(const double* x, const double* y, size_t n)
 {
     DotResults results = {0};
 

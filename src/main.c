@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "io.h"
+#include "demo.h"
 #include "dotprod.h"
 
 #define MAX_SHOW_VECTOR 10
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
     }
 
     if (mode == DEMO_MODE) {
-        printf("Demo mode coming soon...\n");
+        run_demo();
         return 0;
     }
 
@@ -82,8 +83,8 @@ int main(int argc, char* argv[])
 
     hello_message();
 
-    DotResults results = compute_all(data.x, data.y, data.n);
-    show_table(&results);
+    DotResults results = compute_all_dot(data.x, data.y, data.n);
+    show_table_dot(&results);
 
     free_input(&data);
 

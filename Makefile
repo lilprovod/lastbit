@@ -3,7 +3,7 @@ RM = C:/msys64/usr/bin/rm.exe
 CFLAGS = -std=c99 -Wall -Wextra -pedantic -O2 -Isrc
 LDFLAGS = -lm -lgmp
 
-SRC = src/main.c src/io.c src/dotprod.c src/sum.c src/mul.c
+SRC = src/main.c src/io.c src/dotprod.c src/sum.c src/mul.c src/demo.c
 OBJ = $(SRC:.c=.o)
 
 TARGET = lastbit

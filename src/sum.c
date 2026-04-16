@@ -137,3 +137,18 @@ double sum_gmp(const double* values, size_t n)
 
     return total;
 }
+
+
+SumResults compute_all_sum(const double* values, size_t n)
+{
+    SumResults results = {0};
+
+    results.naive       = sum_naive(values, n);
+    results.kahan       = sum_kahan(values, n);
+    results.kbn2        = sum_kbn2(values, n);
+    results.kbn3        = sum_kbn3(values, n);
+    results.ogita_oishi = sum_kbn3(values, n);
+    results.gmp         = sum_gmp(values, n);
+
+    return results;
+}
