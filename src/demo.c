@@ -163,10 +163,10 @@ static void s_example_4()
 
     double naive = dot_naive(x, y, size);
     double ozaki = dot_ozaki(x, y, size);
+    double ref   = dot_reference(x, y, size);
 
     printf("\n[SPECIAL EXAMPLE] Check Ozaki on example.\n\n");
-    printf("\tExample:\t(2^27 + 1, 1) * (2^27 - 1, -1) =\n"
-           "\t        \t2^54 - 2\n");
+    printf("\tExample:\t(2^27 + 1, 1) * (2^27 - 1, -1) = 2^54 - 2\n");
 
     printf("\n\n");
 
@@ -174,6 +174,7 @@ static void s_example_4()
     printf("-------------+------------------------\n");
     printf("%-12s | %.17g\n", "naive", naive);
     printf("%-12s | %.17g\n", "ozaki", ozaki);
+    printf("%-12s | %.17g\n", "reference*", ref);
 
     printf("\n");
 }
