@@ -147,7 +147,7 @@ SumResults compute_all_sum(const double* values, size_t n)
     results.kahan       = sum_kahan(values, n);
     results.kbn2        = sum_kbn2(values, n);
     results.kbn3        = sum_kbn3(values, n);
-    results.ogita_oishi = sum_kbn3(values, n);
+    results.ogita_oishi = sum_ogita_oishi(values, n);
     results.gmp         = sum_gmp(values, n);
 
     return results;
