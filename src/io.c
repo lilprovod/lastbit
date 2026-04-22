@@ -74,13 +74,16 @@ void hello_message()
 
 void show_table_dot(const DotResults* results)
 {
+    char ozaki_name[32];
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+
     printf("%-12s | %-24s\n", "Method", "Result"                    );
     printf("-------------+------------------------\n"               );
     printf("%-12s | %.17g\n", "naive",       results->naive         );
     printf("%-12s | %.17g\n", "kahan",       results->kahan         );
     printf("%-12s | %.17g\n", "kbn2",        results->kbn2          );
     printf("%-12s | %.17g\n", "kbn3",        results->kbn3          );
-    printf("%-12s | %.17g\n", "ozaki (k=2)", results->ozaki         );
+    printf("%-12s | %.17g\n", ozaki_name,    results->ozaki         );
     printf("%-12s | %.17g\n", "ogita-oishi", results->ogita_oishi   );
     printf("%-12s | %.17g\n", "reference*",  results->reference     );
 }
