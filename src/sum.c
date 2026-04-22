@@ -66,7 +66,7 @@ double sum_kbn2(const double* values, size_t n)
         err2 += delta1;
     }
 
-    double total = sum + err1 + err2;
+    double total = (err2 + err1) + sum;
 
     return total;
 }
@@ -96,7 +96,7 @@ double sum_kbn3(const double* values, size_t n)
         err3 += delta2;
     }
 
-    double total = sum + err1 + err2 + err3;
+    double total = ((err3 + err2) + err1) + sum;
 
     return total;
 }
