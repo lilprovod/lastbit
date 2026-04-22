@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 
 #include "demo.h"
@@ -150,6 +151,33 @@ static void s_example_3()
     printf("\n");
 }
 
+/**
+ * @brief Отдельный пример для алгоритма Ozaki
+ */
+static void s_example_4()
+{
+    static size_t size = 2;
+
+    double x[] = {pow(2.0, 27) + 1.0, 1.0};
+    double y[] = {pow(2.0, 27) - 1.0, -1.0};
+
+    double naive = dot_naive(x, y, size);
+    double ozaki = dot_ozaki(x, y, size);
+
+    printf("\n[SPECIAL EXAMPLE] Check Ozaki on example.\n\n");
+    printf("\tExample:\t(2^27 + 1, 1) * (2^27 - 1, -1) =\n"
+           "\t        \t2^54 - 2\n");
+
+    printf("\n\n");
+
+    printf("%-12s | %-24s\n", "Method", "Result");
+    printf("-------------+------------------------\n");
+    printf("%-12s | %.17g\n", "naive", naive);
+    printf("%-12s | %.17g\n", "ozaki", ozaki);
+
+    printf("\n");
+}
+
 void run_demo()
 {
     printf("\n[Demo cases for dot product algorithms]\n");
@@ -163,4 +191,5 @@ void run_demo()
     s_example_1();
     s_example_2();
     s_example_3();
+    s_example_4();
 }
