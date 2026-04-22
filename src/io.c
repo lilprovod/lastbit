@@ -81,7 +81,6 @@ void show_table_dot(const DotResults* results)
     printf("%-12s | %.17g\n", "kbn2",        results->kbn2          );
     printf("%-12s | %.17g\n", "kbn3",        results->kbn3          );
     printf("%-12s | %.17g\n", "ogita-oishi", results->ogita_oishi   );
-    printf("%-12s | %.17g\n", "fma",         results->fma           );
     printf("%-12s | %.17g\n", "reference*",  results->reference     );
 }
 

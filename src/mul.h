@@ -5,7 +5,7 @@
 double mul_naive(const double x, const double y);
 
 /**
- * @brief Точное умножение двух чисел через FMA
+ * @brief Точное произведение двух чисел через FMA
  * 
  * @param[in] x Число А
  * @param[in] y Число Б
@@ -14,6 +14,6 @@ double mul_naive(const double x, const double y);
  * 
  * Результат точного умножения `x` * `y` = `hi` + `lo`
 */
-void mul_fma(const double x, const double y, double* hi, double* lo);
+void two_product_fma(const double x, const double y, double* hi, double* lo);
 
 #endif
