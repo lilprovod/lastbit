@@ -7,12 +7,36 @@
 #include "mul.h"
 #include "sum.h"
 
+static char mark_exact(double value, double exact)
+{
+    const double eps = 1e-9;
+    return (fabs(value - exact) < eps) ? 'v' : 'x';
+}
+
+static void show_demo_comparison(const DotResults* r, double exact)
+{
+    char ozaki_name[32];
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+
+    printf("%-12s | %-24s | %-6s\n", "Method", "Result", "Is exact?"    );
+    printf("-------------+---------------------------------\n"          );
+
+    printf("%-12s | %.17g | %c\n", "naive", r->naive, mark_exact(r->naive, exact));
+    printf("%-12s | %.17g | %c\n", "kahan", r->kahan, mark_exact(r->kahan, exact));
+    printf("%-12s | %.17g | %c\n", "kbn2", r->kbn2, mark_exact(r->kbn2, exact));
+    printf("%-12s | %.17g | %c\n", "kbn3", r->kbn3, mark_exact(r->kbn3, exact));
+    printf("%-12s | %.17g | %c\n", ozaki_name, r->ozaki, mark_exact(r->ozaki, exact));
+    printf("%-12s | %.17g | %c\n", "ogita-oishi", r->ogita_oishi, mark_exact(r->ogita_oishi, exact));
+    printf("%-12s | %.17g | %c\n", "reference*", r->reference, mark_exact(r->reference, exact));
+}
+
 static void run_demo_case(
     const char*     title,
     const char*     description,
     const double*   x,
     const double*   y,
-    size_t          n
+    size_t          n,
+    const double    exact_value
 )
 {
     printf("\n[DEMO CASE] %s", title);
@@ -22,44 +46,90 @@ static void run_demo_case(
 
     show_input(&data);
 
+    printf("\nExact value: %.17g", exact_value);
+
     printf("\n\n");
 
     DotResults results = compute_all_dot(x, y, n);
 
-    show_table_dot(&results);
+    show_demo_comparison(&results, exact_value);
 
     printf("\n");
+}
+
+/** @brief Пример с нулевым вектором */
+static void zero_vector()
+{
+    static const size_t size = 3;
+    static const double vec_x[] = {0.0, 0.0, 0.0};
+    static const double vec_y[] = {0.0, 5.7, -1e16};
+
+    static const double exact = 0.0;
+
+    run_demo_case(
+        "Zero vector",
+        "All results of the dot product must be zero",
+        vec_x,
+        vec_y,
+        size,
+        exact
+    );
+}
+
+/** @brief Простой пример на обычных данных */
+static void simple_case()
+{
+    static const size_t size = 3;
+    static const double vec_x[] = {1.0, 2.0, 3.0};
+    static const double vec_y[] = {3.0, 2.0, 1.0};
+
+    static const double exact = 10.0;
+
+    run_demo_case(
+        "Simple case",
+        "A small case with simple values",
+        vec_x,
+        vec_y,
+        size,
+        exact
+    );
 }
 
 /** @brief Пример, где наивное скалярное произведение ошибается */
 static void naive_cancellation()
 {
-    static const int size = 3;
+    static const size_t size = 3;
     static const double vec_x[] = {1e16, 1.0, -1e16};
     static const double vec_y[] = {1.0,  1.0,  1.0 };
+
+    static const double exact = 1.0;
 
     run_demo_case(
         "Naive cancellation",
         "Small value is lost between two large opposite terms",
         vec_x,
         vec_y,
-        size
+        size,
+        exact
     );
 }
 
 /** @brief Пример, где ошибка в скалярном произведении накапливается */
 static void error_accumulation()
 {
-    static const int size = 5;
+    static const size_t size = 5;
     static const double vec_x[] = {1e16, 1.0, 1.0, 1.0, -1e16};
     static const double vec_y[] = {1.0,  1.0, 1.0, 1.0,  1.0 };
+
+    static const double exact = 3.0;
 
     run_demo_case(
         "Accumulation of small errors",
         "A few small values accumulate near large ones",
         vec_x,
         vec_y,
-        size
+        size,
+        exact
     );
 }
 
@@ -69,16 +139,19 @@ static void error_accumulation()
  */
 static void order_sensitivity()
 {
-    static const int size = 4;
+    static const size_t size = 4;
     static const double vec_x[] = {1e16, 1.0, -1e16, 1.0};
     static const double vec_y[] = {1.0,  1.0, 1.0,   1.0};
+
+    static const double exact = 2.0;
 
     run_demo_case(
         "Order sensitivity",
         "Result depends on summation order",
         vec_x,
         vec_y,
-        size
+        size,
+        exact
     );
 }
 
@@ -89,11 +162,12 @@ static void order_sensitivity()
  */
 static void s_example_1()
 {
-    static const int size = 3;
+    static const size_t size = 3;
     static const double values[] = {1e16, 1.0, 1.0};
 
-    printf("\n[SPECIAL EXAMPLE] Naive summation is bad.\n\n");
-    printf("\tExample:\t1e16 + 1.0 + 1.0 = 1e16 + 2.0\n");
+    printf("\n[SPECIAL EXAMPLE] Naive summation failure\n\n");
+    printf("\tExample: 1e16 + 1.0 + 1.0\n");
+    printf("\tExact value: 10000000000000002 (1e16 + 2.0)\n");
 
     printf("\n\n");
 
@@ -109,11 +183,12 @@ static void s_example_1()
  */
 static void s_example_2()
 {
-    static const int size = 5;
+    static const size_t size = 5;
     static const double values[] = {1e16, 1.0, 1.0, 1.0, -1e16};
 
-    printf("\n[SPECIAL EXAMPLE] Kahan is bad.\n\n");
-    printf("\tExample:\t1e16 + 1.0 + 1.0 + 1.0 - 1e16 = 3.0\n");
+    printf("\n[SPECIAL EXAMPLE] Kahan failure example\n\n");
+    printf("\tExample: 1e16 + 1.0 + 1.0 + 1.0 - 1e16\n");
+    printf("\tExact value: 3.0\n");
 
     printf("\n\n");
 
@@ -137,16 +212,16 @@ static void s_example_3()
     static double hi, lo;
     two_product_fma(x, y, &hi, &lo);
 
-    printf("\n[SPECIAL EXAMPLE] Naive multiplication is bad.\n\n");
-    printf("\tExample:\t1.0000000000000002 * 1.0000000000000002 =\n"
-           "\t        \t1.00000000000000040000000000000004 = 1 + 4e-16 + 4e-32\n");
+    printf("\n[SPECIAL EXAMPLE] Naive multiplication failure\n\n");
+    printf("\tExample: 1.0000000000000002 * 1.0000000000000002\n");
+    printf("\tExact value: 1.00000000000000040000000000000004 (1 + 4e-16 + 4e-32)\n");
 
     printf("\n\n");
 
     printf("%-12s | %-24s\n", "Method", "Result");
     printf("-------------+------------------------\n");
     printf("%-12s | %.17g\n", "naive", naive);
-    printf("%-12s | %.17g + %.17g\n", "fma", hi, lo);
+    printf("%-12s | %.17g + %.17g\n", "2ProductFMA", hi, lo);
 
     printf("\n");
 }
@@ -156,38 +231,46 @@ static void s_example_3()
  */
 static void s_example_4()
 {
-    static size_t size = 2;
+    static const size_t size = 2;
 
-    double x[] = {pow(2.0, 27) + 1.0, 1.0};
-    double y[] = {pow(2.0, 27) - 1.0, -1.0};
+    const double vec_x[] = {pow(2.0, 27) + 1.0, 1.0};
+    const double vec_y[] = {pow(2.0, 27) - 1.0, -1.0};
 
-    double naive = dot_naive(x, y, size);
-    double ozaki = dot_ozaki(x, y, size);
-    double ref   = dot_reference(x, y, size);
+    double naive = dot_naive(vec_x, vec_y, size);
+    double ozaki = dot_ozaki(vec_x, vec_y, size);
+    double ref   = dot_reference(vec_x, vec_y, size);
 
-    printf("\n[SPECIAL EXAMPLE] Check Ozaki on example.\n\n");
-    printf("\tExample:\t(2^27 + 1, 1) * (2^27 - 1, -1) = 2^54 - 2\n");
+    printf("\n[SPECIAL EXAMPLE] Ozaki validation example\n\n");
+    printf("\tExample: (2^27 + 1, 1) * (2^27 - 1, -1)\n");
+    printf("\tExact value: 18014398509481982 (2^54 - 2)\n");
 
     printf("\n\n");
 
-    printf("%-12s | %-24s\n", "Method", "Result");
+
+    char ozaki_name[32];
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+
+    printf("%-12s | %-24s\n", "Method", "Result"     );
     printf("-------------+------------------------\n");
-    printf("%-12s | %.17g\n", "naive", naive);
-    printf("%-12s | %.17g\n", "ozaki", ozaki);
-    printf("%-12s | %.17g\n", "reference*", ref);
+
+    printf("%-12s | %.17g\n", "naive",      naive);
+    printf("%-12s | %.17g\n", ozaki_name,   ozaki);
+    printf("%-12s | %.17g\n", "reference*", ref  );
 
     printf("\n");
 }
 
 void run_demo()
 {
-    printf("\n[Demo cases for dot product algorithms]\n");
+    printf("\n-=== [DEMO CASES FOR DOT PRODUCT ALGORITHMS] ===-\n");
 
+    zero_vector();
+    simple_case();
     naive_cancellation();
     error_accumulation();
     order_sensitivity();
 
-    printf("\n[Special examples for summation and multiplication]\n");
+    printf("\n-=== [SPECIAL EXAMPLES FOR SUMMATION AND MULTIPLICATION] ===-\n");
 
     s_example_1();
     s_example_2();
