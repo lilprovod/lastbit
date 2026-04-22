@@ -134,7 +134,7 @@ static void s_example_3()
     const double naive = mul_naive(x, y);
 
     static double hi, lo;
-    mul_fma(x, y, &hi, &lo);
+    two_product_fma(x, y, &hi, &lo);
 
     printf("\n[SPECIAL EXAMPLE] Naive multiplication is bad.\n\n");
     printf("\tExample:\t1.0000000000000002 * 1.0000000000000002 =\n"
