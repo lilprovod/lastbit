@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     }
 
     if (mode == DEMO_MODE) {
-        run_demo();
+        run_demo(&ozaki_config);
         return 0;
     }
 

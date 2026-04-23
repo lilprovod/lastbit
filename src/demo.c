@@ -36,6 +36,7 @@ static void run_demo_case(
     const double*   x,
     const double*   y,
     size_t          n,
+    OzakiConfig*    ozaki,
     const double    exact_value
 )
 {
@@ -44,23 +45,21 @@ static void run_demo_case(
 
     InputData data = {.x = (double*)x, .y = (double*)y, .n = n};
 
-    OzakiConfig ozaki_config = OZAKI_CONFIG_DEFAULT;
-
     show_input(&data);
 
     printf("\nExact value: %.17g", exact_value);
 
     printf("\n\n");
 
-    DotResults results = compute_all_dot(x, y, n, &ozaki_config);
+    DotResults results = compute_all_dot(x, y, n, ozaki);
 
-    show_demo_comparison(&results, &ozaki_config, exact_value);
+    show_demo_comparison(&results, ozaki, exact_value);
 
     printf("\n");
 }
 
 /** @brief Пример с нулевым вектором */
-static void zero_vector()
+static void zero_vector(OzakiConfig* ozaki)
 {
     static const size_t size = 3;
     static const double vec_x[] = {0.0, 0.0, 0.0};
@@ -74,12 +73,13 @@ static void zero_vector()
         vec_x,
         vec_y,
         size,
+        ozaki,
         exact
     );
 }
 
 /** @brief Простой пример на обычных данных */
-static void simple_case()
+static void simple_case(OzakiConfig* ozaki)
 {
     static const size_t size = 3;
     static const double vec_x[] = {1.0, 2.0, 3.0};
@@ -93,12 +93,13 @@ static void simple_case()
         vec_x,
         vec_y,
         size,
+        ozaki,
         exact
     );
 }
 
 /** @brief Пример, где наивное скалярное произведение ошибается */
-static void naive_cancellation()
+static void naive_cancellation(OzakiConfig* ozaki)
 {
     static const size_t size = 3;
     static const double vec_x[] = {1e16, 1.0, -1e16};
@@ -112,12 +113,13 @@ static void naive_cancellation()
         vec_x,
         vec_y,
         size,
+        ozaki,
         exact
     );
 }
 
 /** @brief Пример, где ошибка в скалярном произведении накапливается */
-static void error_accumulation()
+static void error_accumulation(OzakiConfig* ozaki)
 {
     static const size_t size = 5;
     static const double vec_x[] = {1e16, 1.0, 1.0, 1.0, -1e16};
@@ -131,6 +133,7 @@ static void error_accumulation()
         vec_x,
         vec_y,
         size,
+        ozaki,
         exact
     );
 }
@@ -139,7 +142,7 @@ static void error_accumulation()
  * @brief Пример, где важен порядок чисел внутри векторов скалярного
  * произведения
  */
-static void order_sensitivity()
+static void order_sensitivity(OzakiConfig* ozaki)
 {
     static const size_t size = 4;
     static const double vec_x[] = {1e16, 1.0, -1e16, 1.0};
@@ -153,6 +156,7 @@ static void order_sensitivity()
         vec_x,
         vec_y,
         size,
+        ozaki,
         exact
     );
 }
@@ -231,17 +235,15 @@ static void s_example_3()
 /**
  * @brief Отдельный пример для алгоритма Ozaki
  */
-static void s_example_4()
+static void s_example_4(OzakiConfig* ozaki)
 {
     static const size_t size = 2;
 
     const double vec_x[] = {pow(2.0, 27) + 1.0, 1.0};
     const double vec_y[] = {pow(2.0, 27) - 1.0, -1.0};
 
-    OzakiConfig ozaki_config = OZAKI_CONFIG_DEFAULT;
-
     double naive = dot_naive(vec_x, vec_y, size);
-    double ozaki = dot_ozaki(vec_x, vec_y, size, &ozaki_config);
+    double o     = dot_ozaki(vec_x, vec_y, size, ozaki);
     double ref   = dot_reference(vec_x, vec_y, size);
 
     printf("\n[SPECIAL EXAMPLE] Ozaki validation example\n\n");
@@ -252,32 +254,32 @@ static void s_example_4()
 
 
     char ozaki_name[32];
-    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%zu)", ozaki_config.ozaki_layers);
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%zu)", ozaki->ozaki_layers);
 
     printf("%-12s | %-24s\n", "Method", "Result"     );
     printf("-------------+------------------------\n");
 
     printf("%-12s | %.17g\n", "naive",      naive);
-    printf("%-12s | %.17g\n", ozaki_name,   ozaki);
+    printf("%-12s | %.17g\n", ozaki_name,   o    );
     printf("%-12s | %.17g\n", "reference*", ref  );
 
     printf("\n");
 }
 
-void run_demo()
+void run_demo(OzakiConfig* ozaki)
 {
     printf("\n-=== [DEMO CASES FOR DOT PRODUCT ALGORITHMS] ===-\n");
 
-    zero_vector();
-    simple_case();
-    naive_cancellation();
-    error_accumulation();
-    order_sensitivity();
+    zero_vector(ozaki);
+    simple_case(ozaki);
+    naive_cancellation(ozaki);
+    error_accumulation(ozaki);
+    order_sensitivity(ozaki);
 
     printf("\n-=== [SPECIAL EXAMPLES FOR SUMMATION AND MULTIPLICATION] ===-\n");
 
     s_example_1();
     s_example_2();
     s_example_3();
-    s_example_4();
+    s_example_4(ozaki);
 }
