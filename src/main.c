@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "io.h"
@@ -18,9 +19,25 @@ int main(int argc, char* argv[])
     ProgramMode mode = NORMAL_MODE;
     const char* filename = NULL;
 
+    OzakiConfig ozaki_config = OZAKI_CONFIG_DEFAULT;
+
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--demo") == 0) {
             mode = DEMO_MODE;
+        }
+        else if (strcmp(argv[i], "-k") == 0) {
+            if (i + 1 < argc) {
+                char* endptr;
+                size_t k = strtoull(argv[i + 1], &endptr, 10);
+
+                if (argv[i + 1] == endptr) {
+                    fprintf(stderr, "Ozaki layers value must be integer ('-k')\n");
+                }
+
+                ozaki_config.ozaki_layers = k;
+            } else {
+                fprintf(stderr, "Expected integer value for '-k'\n");
+            }
         }
         else if (argv[i][0] == '-') {
             fprintf(stderr, "Unknown option: %s\n", argv[i]);
@@ -83,8 +100,8 @@ int main(int argc, char* argv[])
 
     hello_message();
 
-    DotResults results = compute_all_dot(data.x, data.y, data.n);
-    show_table_dot(&results);
+    DotResults results = compute_all_dot(data.x, data.y, data.n, &ozaki_config);
+    show_table_dot(&results, &ozaki_config);
 
     free_input(&data);
 

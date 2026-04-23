@@ -72,10 +72,10 @@ void hello_message()
     printf( "\n[Dot product algorithm comparison]\n\n");
 }
 
-void show_table_dot(const DotResults* results)
+void show_table_dot(const DotResults* results, const OzakiConfig* ozaki)
 {
     char ozaki_name[32];
-    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%zu)", ozaki->ozaki_layers);
 
     printf("%-12s | %-24s\n", "Method", "Result"                    );
     printf("-------------+------------------------\n"               );

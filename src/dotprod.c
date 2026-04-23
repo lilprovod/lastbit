@@ -102,7 +102,7 @@ static void split_vector_ozaki(const double* x, size_t n, size_t K, double* laye
 {
     if (n == 0 || K == 0) return;
     
-    const int p_s = (MANTISSA_BITS - ceil_log2(n) - 1) / 2;
+    const int p_s = (IEEE_754_MANTISSA_BITS - ceil_log2(n) - 1) / 2;
 
     double* rem = malloc(n * sizeof(double));
     if (!rem) { return; }
@@ -129,7 +129,7 @@ static void split_vector_ozaki(const double* x, size_t n, size_t K, double* laye
         int E;
         frexp(mu, &E);
         
-        double sigma = 1.5 * ldexp(1.0, E + MANTISSA_BITS - 1 - p_s);
+        double sigma = 1.5 * ldexp(1.0, E + IEEE_754_MANTISSA_BITS - 1 - p_s);
 
         for (size_t i = 0; i < n; i++) {
             double xk_i = (rem[i] + sigma) - sigma;
@@ -147,9 +147,9 @@ static void split_vector_ozaki(const double* x, size_t n, size_t K, double* laye
     free(rem);
 }
 
-double dot_ozaki(const double* x, const double* y, size_t n)
+double dot_ozaki(const double* x, const double* y, size_t n, const OzakiConfig* ozaki)
 {
-    size_t K = OZAKI_LAYERS;
+    size_t K = ozaki->ozaki_layers;
 
     double* x_layers = malloc(K*n * sizeof(double));
     double* y_layers = malloc(K*n * sizeof(double));
@@ -185,7 +185,7 @@ double dot_ozaki(const double* x, const double* y, size_t n)
 }
 
 
-DotResults compute_all_dot(const double* x, const double* y, size_t n)
+DotResults compute_all_dot(const double* x, const double* y, size_t n, const OzakiConfig* ozaki)
 {
     DotResults results = {0};
 
@@ -194,7 +194,7 @@ DotResults compute_all_dot(const double* x, const double* y, size_t n)
     results.kbn2        = dot_kbn2(x, y, n);
     results.kbn3        = dot_kbn3(x, y, n);
     results.ogita_oishi = dot_ogita_oishi(x, y, n);
-    results.ozaki       = dot_ozaki(x, y, n);
+    results.ozaki       = dot_ozaki(x, y, n, ozaki);
     results.reference   = dot_reference(x, y, n);
 
     return results;

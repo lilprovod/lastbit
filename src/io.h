@@ -32,7 +32,7 @@ void print_usage();
 
 void hello_message();
 
-void show_table_dot(const DotResults* results);
+void show_table_dot(const DotResults* results, const OzakiConfig* ozaki);
 
 void show_table_sum(const SumResults* results);
 

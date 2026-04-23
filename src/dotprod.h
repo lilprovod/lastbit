@@ -3,11 +3,14 @@
 
 #include <stddef.h>
 
-// Стандартное число бит мантиссы для IEE 754 double
-#define MANTISSA_BITS 53
+#define IEEE_754_MANTISSA_BITS 53
+#define DEFAULT_OZAKI_LAYERS 3
 
-// Количество слоев (slices) для алгоритма Ozaki
-#define OZAKI_LAYERS 2
+#define OZAKI_CONFIG_DEFAULT { .ozaki_layers = DEFAULT_OZAKI_LAYERS }
+
+typedef struct {
+    size_t ozaki_layers;
+} OzakiConfig;
 
 typedef struct {
     double naive;
@@ -35,13 +38,13 @@ double dot_kbn3(const double* x, const double* y, size_t n);
 double dot_ogita_oishi(const double* x, const double* y, size_t n);
 
 /** @brief Скалярное произведение через алгоритм Ozaki */
-double dot_ozaki(const double* x, const double* y, size_t n);
+double dot_ozaki(const double* x, const double* y, size_t n, const OzakiConfig* ozaki);
 
 /** @brief (Эталон*) Скалярное произведение с суммой GMP и произведением FMA */
 double dot_reference(const double* x, const double* y, size_t n);
 
 
 /** @brief Рассчитывает скалярное произведение всеми алгоритмами */
-DotResults compute_all_dot(const double* x, const double* y, size_t n);
+DotResults compute_all_dot(const double* x, const double* y, size_t n, const OzakiConfig* ozaki);
 
 #endif

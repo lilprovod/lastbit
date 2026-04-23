@@ -13,10 +13,10 @@ static char mark_exact(double value, double exact)
     return (fabs(value - exact) < eps) ? 'v' : 'x';
 }
 
-static void show_demo_comparison(const DotResults* r, double exact)
+static void show_demo_comparison(const DotResults* r, const OzakiConfig* ozaki, double exact)
 {
     char ozaki_name[32];
-    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%zu)", ozaki->ozaki_layers);
 
     printf("%-12s | %-24s | %-6s\n", "Method", "Result", "Is exact?"    );
     printf("-------------+---------------------------------\n"          );
@@ -44,15 +44,17 @@ static void run_demo_case(
 
     InputData data = {.x = (double*)x, .y = (double*)y, .n = n};
 
+    OzakiConfig ozaki_config = OZAKI_CONFIG_DEFAULT;
+
     show_input(&data);
 
     printf("\nExact value: %.17g", exact_value);
 
     printf("\n\n");
 
-    DotResults results = compute_all_dot(x, y, n);
+    DotResults results = compute_all_dot(x, y, n, &ozaki_config);
 
-    show_demo_comparison(&results, exact_value);
+    show_demo_comparison(&results, &ozaki_config, exact_value);
 
     printf("\n");
 }
@@ -236,8 +238,10 @@ static void s_example_4()
     const double vec_x[] = {pow(2.0, 27) + 1.0, 1.0};
     const double vec_y[] = {pow(2.0, 27) - 1.0, -1.0};
 
+    OzakiConfig ozaki_config = OZAKI_CONFIG_DEFAULT;
+
     double naive = dot_naive(vec_x, vec_y, size);
-    double ozaki = dot_ozaki(vec_x, vec_y, size);
+    double ozaki = dot_ozaki(vec_x, vec_y, size, &ozaki_config);
     double ref   = dot_reference(vec_x, vec_y, size);
 
     printf("\n[SPECIAL EXAMPLE] Ozaki validation example\n\n");
@@ -248,7 +252,7 @@ static void s_example_4()
 
 
     char ozaki_name[32];
-    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%u)", OZAKI_LAYERS);
+    snprintf(ozaki_name, sizeof(ozaki_name), "ozaki (k=%zu)", ozaki_config.ozaki_layers);
 
     printf("%-12s | %-24s\n", "Method", "Result"     );
     printf("-------------+------------------------\n");
