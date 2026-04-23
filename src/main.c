@@ -35,6 +35,8 @@ int main(int argc, char* argv[])
                 }
 
                 ozaki_config.ozaki_layers = k;
+
+                i += 1;
             } else {
                 fprintf(stderr, "Expected integer value for '-k'\n");
             }
